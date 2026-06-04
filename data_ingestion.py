@@ -9,7 +9,7 @@ def load_all_csvs():
     print("="*80)
     csv_files = sorted([f for f in os.listdir(RAW_DIR) if f.endswith('.csv')])
     print(f"Found {len(csv_files)} CSV files\n")
-    
+
     for file in csv_files:
         path = os.path.join(RAW_DIR, file)
         try:
@@ -45,19 +45,19 @@ def validate_amfi_codes():
     print("="*80)
     fm = pd.read_csv(os.path.join(RAW_DIR, '01_fund_master.csv'))
     nh = pd.read_csv(os.path.join(RAW_DIR, '02_nav_history.csv'))
-    
+
     master_codes = set(fm['amfi_code'].dropna().astype(str).str.strip().str.upper())
     history_codes = set(nh['amfi_code'].dropna().astype(str).str.strip().str.upper())
-    
+
     print(f"fund_master unique codes : {len(master_codes)}")
     print(f"nav_history unique codes : {len(history_codes)}")
     print(f"Codes present in both    : {len(master_codes & history_codes)}")
-    
+
     if len(master_codes - history_codes) == 0:
         print("\n All fund_master codes exist in nav_history!")
     else:
         print(f"\n Missing codes: {list(master_codes - history_codes)[:5]}")
-    
+
     print(f"\nData Quality Summary: Coverage = {100 * len(master_codes & history_codes) / len(master_codes):.1f}%")
     print("="*80)
 
